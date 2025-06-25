@@ -13,6 +13,7 @@ param = {'ontologie': "src/ontologie.csv",
         'corpus': 'src/test_corpus.csv'}
 
 st.set_page_config(layout='wide')
+st.title('navigation IEML et érudit')
 
 # --- Configuration de la grille ---
 
