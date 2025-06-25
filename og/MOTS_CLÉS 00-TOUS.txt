@@ -1,0 +1,903 @@
+Chaque mot-clé est représenté par une phrase IEML
+On devrait pouvoir faire des recherches de type :
+- quand on est devant un mot-clé, quels sont les mots-clés ayant un seul mot IEML de différence, en général ou bien dans un rôle particulier
+- les mots-clés ayant un mot IEML commun, en général ou bien dans un rôle particulier
+- etc.
+
+RAPPELS 
+
+Toutes les phrases ont une racine non-vide
+
+rôle 0 = racine de la phrase. Ici, c'est le "thème"
+rôle 1 = initiateur, sujet
+rôle 2 = interactant, objet (très utilisé ici)
+rôle 3 = destinataire
+rôle 4 = causalité
+rôle 5 = temps
+rôle 6 = lieu
+rôle 7 = intention
+rôle 8 = manière
+
+*
+Les rôles 4, 5, 6, 7, 8 peuvent être précisés par des prépositions qui sont précédées par un " * "
+Chaque préposition ne s'utilise que dans un seul rôle. Il y a la liste des prépositions par rôles dans le dictionnaire IEML.
+
+~
+" ~ " indique une flexion (pluriel, mode, temps, etc.)
+Il y a la liste des flexions dans le dictionnaire IEML.
+
+#
+" # " indique un mot du dictionnaire IEML. Le même concept donne lieu à des versions nominales, verbales, adjectivales et adverbiales. Chacune de ces versions peut comporter plusieurs synonymes.
+
+
+##
+J'ai été obligé de créer de nouveaux mots en plus des mots IEML afin de représenter chaque mot-clé dans une seule phrase. Bien entendu les nouveaux mots sont tous créés avec des mots IEML! Je fais précéder les mots du lexique spécial par ##
+
+Voici leur courte liste
+
+LEXIQUE SPÉCIAL
+
+##roman
+0 #raconter
+5 #longuement
+8 *sans #poésie (en prose)
+
+## douze vers
+0 #ligne
+8 #douze
+
+## bande dessinée
+0 #raconter 
+4 *par le moyen de ~pluriel #dessin
+
+## chanter
+0 #jouer ou chanter une mélodie
+4 *par le moyen de #voix
+
+##scénario
+0 #plan 
+1 #récit
+2 #dialogue &et #action
+
+##colonialisme
+0 #excercer le pouvoir
+1 #empire
+2 ##autochtone
+
+##étude critique
+0 #discipline scientifique
+7 #critique
+
+
+– LISTE DES 193 MOTS-CLÉS –
+
+RACINE : DIMENSION COGNITIVE
+
+MOT-CLÉ:représentation (mentalité)
+0 #dimension cognitive
+2 #représentation mentale
+
+MOT-CLÉ:réflexion
+0 #dimension cognitive
+2 #réflexion
+
+MOT-CLÉ:expérience
+0 #dimension cognitive
+2 #expérience
+
+MOT-CLÉ:perceptions
+0 #dimension cognitive
+2 ~plusieurs #perception
+
+MOT-CLÉ:imprévu
+0 #dimension cognitive
+0 ~négation ~participe #prévoir
+
+
+RACINE: NÉGATIVITÉ
+
+MOT-CLÉ:incohérence
+0 #négativité
+2 #incohérence
+
+MOT-CLÉ:violence
+0 #négativité
+2 #violence
+
+MOT-CLÉ:exploitation
+0 #négativité
+2 #exploitation
+
+MOT-CLÉ:oubli
+0 #négativité
+2 #oubli
+
+MOT-CLÉ:malfaisance
+0 #négativité
+2 #action
+4 *a pour effet #mal
+
+MOT-CLÉ:effondrement
+0 #négativité
+2 #descente
+4 *par ~voix passive #détruire
+8 #rapide
+
+
+RACINE: IDENTITÉ 
+
+MOT-CLÉ:identité
+0 #identité
+
+MOT-CLÉ:subjectivité
+0 #identité
+2 #subjectivité
+
+MOT-CLÉ:possession
+0 #identité
+2 #possession
+
+MOT-CLÉ:image de soi
+0 #identité
+2 #image
+8 *possessif abstrait #soi
+
+MOT-CLÉ:altérité
+0 #identité
+2 #autre
+
+MOT-CLÉ:spontanéité
+0 #identité
+2 #action
+6 *venant de #soi
+
+
+RACINE: COMMUNICATION
+
+MOT-CLÉ:édition
+0 #communication
+2 #édition
+
+MOT-CLÉ:écrit
+0 #communication
+2 #texte
+
+MOT-CLÉ:représentation (théâtre)
+0 #communication
+4 #représentation dramatique
+
+MOT-CLÉ:audience
+0 #communication
+2 #œuvre de l'esprit
+3 #public
+
+MOT-CLÉ:réception
+0 #communication
+2 #œuvre de l'esprit
+3 #public
+4 #réception
+
+MOT-CLÉ:restitution
+0 #communication
+2 #œuvre de l'esprit
+8 *encore #présenter
+
+MOT-CLÉ:intermédialité
+0 #communication
+2 #œuvre de l'esprit
+6 *entre ~plusieurs #media
+
+MOT-CLÉ:transmédia
+0 #communication
+2 #œuvre de l'esprit
+6 *à travers ~plusieurs #media
+
+MOT-CLÉ:littératie médiatique multimodale
+0 #communication
+2 #lire et écrire
+4 *fait de la matière #audiovisuel
+6 *à travers ~plusieurs #media
+
+MOT-CLÉ:conteuse
+0 #communication
+1 ~féminin #conteur
+2 #récit
+
+RACINE: APPRENTISSAGE
+
+MOT-CLÉ:éducation
+0 #apprentissage
+7 *dans le contexte de #éducation
+
+MOT-CLÉ:apprentissage de la lecture
+0 #apprentissage
+2 #lecture
+
+MOT-CLÉ:acquisition
+0 #apprentissage
+4 *a pour résultat #accomplissement
+
+MOT-CLÉ:acquisition d'une langue seconde
+0 #apprentissage
+4 *a pour résultat #accomplissement
+7 *dans le contexte de #maîtrise d'une seconde langue
+
+MOT-CLÉ:apprentissage français langue seconde
+0 #apprentissage
+2 #langue française
+7 *dans le contexte de #maîtrise d'une seconde langue
+
+MOT-CLÉ:enseignement et apprentissage d'une langue seconde/étrangère
+0 #apprentissage
+4 *parce que #enseignement
+7 *dans le contexte de #maîtrise d'une seconde langue
+
+MOT-CLÉ:enseignement en ligne
+0 #apprentissage
+4 *parce que #enseignement
+6 #en ligne
+
+MOT-CLÉ:approches pédagogiques innovantes
+0 #apprentissage
+4 *par le moyen de ~plusieurs #innovation
+7 *dans le contexte de #pédagogie
+
+MOT-CLÉ:didactique
+0 #apprentissage
+7 *dans le contexte de #pédagogie
+
+MOT-CLÉ:séquences didactiques
+0 #apprentissage
+4 *par le moyen de ~plusieurs #pas
+7 *dans le contexte de #pédagogie
+
+MOT-CLÉ:outil pédagogique
+0 #apprentissage
+2 #outil
+7 *dans le contexte de #pédagogie
+
+MOT-CLÉ:stratégies d'apprentissage
+0 #apprentissage
+4 *par le moyen de #stratégie
+
+MOT-CLÉ:enseignement et apprentissage
+0 #apprentissage
+4 *parce que #enseignement
+
+MOT-CLÉ:salle de classe
+0 #apprentissage
+6 *dans #salle
+7 *dans le contexte de #école
+
+
+RACINE: THÉORIE
+
+MOT-CLÉ:intertextualité
+0 #théorie
+6 *entre ~plusieurs #texte
+
+MOT-CLÉ:péritexte
+0 #théorie
+6 *autour #texte
+
+MOT-CLÉ:corpus littéraire
+0 #théorie
+2 #littérature
+4 *contenu dans le tout #corpus
+
+MOT-CLÉ:herméneutique
+0 #théorie
+2 #herméneutique
+
+MOT-CLÉ:épistémologie
+0 #théorie
+2 #épistémologie
+
+MOT-CLÉ:présence auctoriale
+0 #théorie
+2 #auteur
+4 *a pour propriété #présence
+
+MOT-CLÉ:identité auctoriale
+0 #théorie
+2 #auteur
+4 *a pour propriété #identité
+
+MOT-CLÉ:éditorialisation
+0 #théorie
+2 #édition
+4 ~plusieurs #processus
+
+MOT-CLÉ:théories de la création
+0 #théorie
+2 #création
+
+MOT-CLÉ:poétique
+0 #théorie
+2 #poésie
+
+MOT-CLÉ:sujet poétique
+0 #théorie
+2 #poésie
+4 *au sujet de #sujet
+
+MOT-CLÉ: théorie post coloniale
+0 #théorie
+2 #étude critique
+5 *après ##colonialisme
+
+
+RACINE: PARLER
+
+MOT-CLÉ:paroles
+0 #parler
+2 ~pluriel #parole
+
+MOT-CLÉ:prendre la parole
+0 #parler
+2 ~mode réflexif #exprimer
+6 *devant #public
+
+MOT-CLÉ:entretien
+0 #parler
+2 #dialogue
+8 #enregistré
+
+MOT-CLÉ:débat
+0 #parler
+2 #dialogue
+7 *pour ~le #public
+
+MOT-CLÉ:français parlé
+0 #parler
+2 #langue française
+4 *indépendant de #école
+
+MOT-CLÉ:francophonie
+0 #parler
+1 #communauté de langue
+2 #langue française
+
+MOT-CLÉ:francophone
+0 #parler
+1 #personne
+2 #langue française
+
+MOT-CLÉ:francophonie minoritaire
+0 #parler
+1 #communauté de langue
+2 #langue française
+7 *dans le contexte de #résistance culturelle
+
+MOT-CLÉ:franglais
+0 #parler
+0 #langue française
+8 *comme #langue anglaise
+
+MOT-CLÉ:déclin de la langue
+0 #parler
+2 #langue française
+4 *subit la mutation #déclin
+
+MOT-CLÉ:langues minoritaires
+0 #parler
+2 ~plusieurs #langue
+7 *dans le contexte de #résistance culturelle
+
+MOT-CLÉ:langue étrangère
+0 parler
+2 #langue
+6 *de ~autre #pays
+
+MOT-CLÉ:contact des langues
+0 #parler
+2 #contact
+8 *avec ~plusieurs #langue
+
+
+RACINE: LINGUISTIQUE
+
+MOT-CLÉ:énonciation
+0 #linguistique
+2 #énonciation
+
+MOT-CLÉ: pragmatique
+0 #linguistique
+2 #pragmatique
+
+MOT-CLÉ:performativité
+0 #linguistique
+2 #communication performative
+
+MOT-CLÉ:discours
+0 #linguistique
+2 #discours
+
+MOT-CLÉ:fonctions discursives
+0 #linguistique
+2 ~plusieurs #fonction
+7 *dans le contexte de #discours
+
+MOT-CLÉ:sociolinguistique
+0 #linguistique
+7 *dans le contexte de #société
+
+MOT-CLÉ:variation sociolinguistique
+0 #linguistique
+2 #variation
+7 *dans le contexte de #société
+
+MOT-CLÉ:variation diachronique
+0 #linguistique
+2 #variation
+5 *pendant #temps
+
+MOT-CLÉ:variation régionale
+0 #linguistique
+2 #variation
+6 *dans #territoire
+
+MOT-CLÉ:linguistique appliquée
+0 #linguistique
+2 #application
+
+MOT-CLÉ:transferts linguistiques
+0 #linguistique
+2 ~plusieurs #transfert
+6 *entre ~plusieurs #langue
+
+MOT-CLÉ:rythme phonétique
+0 #linguistique
+2 ~tous #son
+7 *dans le contexte de #rythme
+
+MOT-CLÉ:phonétique acoustique
+0 #linguistique
+2 ~tous #son
+7 *dans le contexte de #entendre
+
+MOT-CLÉ:synchronie dynamique
+0 #linguistique
+2 #langue
+5 *simultanément #changer
+
+
+RACINE: GENRES LITTÉRAIRES OU ARTISTIQUES
+
+MOT-CLÉ:collection
+0 ##genre littéraire ou artistique
+2 #collection
+
+MOT-CLÉ:littérature
+0 #genre littéraire ou artistique
+2 #littérature
+
+MOT-CLÉ:arts visuels et littérature
+0 #genre littéraire ou artistique
+2 #culture visuelle &et #littérature
+
+MOT-CLÉ:champ artistique
+0 ##genre littéraire ou artistique
+2 #champ
+8 *possessif idéal #beaux-arts et littérature
+
+MOT-CLÉ:dialogue littéraire
+0 #genre littéraire ou artistique
+2 #littérature
+4 #dialogue
+
+MOT-CLÉ:littérature autochtone
+0 #genre littéraire ou artistique
+2 #littérature
+8 *possessif pour l'attribution d'un message ou discours  #autochtone
+	
+MOT-CLÉ:littérature-monde
+0 #genre littéraire ou artistique
+2 #littérature 
+6 #ouvertrure au vaste monde
+
+MOT-CLÉ:littérature jeunesse
+0 #genre littéraire ou artistique 
+2 #littérature 
+3 #jeunesse 
+
+MOT-CLÉ:littérature de jeunesse plurilingue
+0 #genre littéraire ou artistique 
+2 #littérature 
+3 #jeunesse 
+4 ~plusieurs #langue 
+
+MOT-CLÉ:littérature franco-ontarienne
+0 #genre littéraire ou artistique
+2 #littérature
+4 #langue française
+6 #Ontario
+
+MOT-CLÉ:littérature algérienne
+0 #genre littéraire ou artistique
+2 #littérature 
+6 #Algérie
+
+MOT-CLÉ:récit de voyage
+0 #genre littéraire ou artistique
+2 #voyage 
+4 #mettre en récit
+
+MOT-CLÉ:autobiographie, récit de vie
+0 #genre littéraire ou artistique
+4 #mettre en récit
+7 #se comprendre soi-même
+
+MOT-CLÉ:autofiction
+0 #genre littéraire ou artistique 
+4 #mettre en récit
+7 #se comprendre soi-même
+8 *avec #fiction 
+
+MOT-CLÉ:tragédie, tragique
+0 #genre littéraire ou artistique
+2 #théâtre
+7 #terreur &et #pitié
+
+MOT-CLÉ:épopée
+0 #genre littéraire ou artistique
+1 ##épopée
+	
+MOT-CLÉ:épistolaire
+0 #genre littéraire ou artistique
+2 #lettre
+
+MOT-CLÉ:comédie, comique
+0 #genre littéraire ou artistique
+2 #faire rire
+
+MOT-CLÉ:satire
+0 #genre littéraire ou artistique 
+2 #faire rire
+7 #critique
+
+MOT-CLÉ:théâtre
+0 #genre littéraire ou artistique 
+2 #théâtre
+
+MOT-CLÉ:cinéma, film
+0 #genre littéraire ou artistique
+2 ##cinéma
+
+MOT-CLÉ:Bande dessinée 
+0 #genre littéraire ou artistique 
+2 ##bande dessinée
+	
+MOT-CLÉ:bande dessinée québécoise
+0 #genre littéraire ou artistique
+2 ##bande dessinée
+6 #Québec
+
+MOT-CLÉ:chanson
+0 #genre littéraire ou artistique
+2 ##chanter
+
+MOT-CLÉ:chanson engagée
+0 #genre littéraire ou artistique
+2 ##chanter
+7 #engagement 
+
+MOT-CLÉ:chanson francophone
+0 #genre littéraire ou artistique
+2 ##chanter
+4 ##langue française
+
+MOT-CLÉ:poésie
+0 #genre littéraire ou artistique
+2 #poésie
+
+MOT-CLÉ:poésie québécoise
+0 #genre littéraire ou artistique
+2 #poésie
+4 ##langue française
+6 #Québec
+
+MOT-CLÉ:sonnet
+0 #genre littéraire ou artistique
+2 #poésie
+4 *a pour forme #douze vers
+
+MOT-CLÉ:roman
+0 #genre littéraire ou artistique (0 ~noun MOT-CLÉ:"b.u.-f.u.g.-'").
+2 ##roman
+	
+MOT-CLÉ:roman historique
+0 #genre litlittérairetéraire ou artistique
+4 ##roman
+5 histoire
+
+MOT-CLÉ:roman jeunesse
+0 #genre littéraire ou artistique (0 ~noun MOT-CLÉ:"b.u.-f.u.g.-'").
+2 ##roman
+3 #jeunesse
+
+MOT-CLÉ:roman de lecture
+0 #genre littéraire ou artistique (0 ~noun MOT-CLÉ:"b.u.-f.u.g.-'").
+2 ##roman
+7 *pour #lire
+
+MOT-CLÉ:romantisme
+0 #genre littéraire ou artistique
+2 exprimer son émotion
+4 #imagination
+7 *coloré par le sentiment #poétique
+
+MOT-CLÉ:écopoétique
+0 #genre littéraire ou artistique
+2 #poésie
+7 *inspiré par #environnement naturel
+
+MOT-CLÉ:art contemporain
+0 #genre littéraire ou artistique
+2 #beaux-arts
+5 #contemporain
+
+RACINE: LOCALITÉ
+
+MOT-CLÉ:frontière
+0 #localiser
+2 #limite
+
+MOT-CLÉ:géographie
+0 #localiser
+7 *dans le contexte de #géographie
+
+MOT-CLÉ:lieux
+0 #localiser
+2 ~plusieurs #lieu
+
+MOT-CLÉ:délocalisation
+0 #localiser
+6 *vers ~autre #lieu
+
+MOT-CLÉ:territoire
+0 #localiser
+2 #territoire
+
+MOT-CLÉ:maison-musée
+0 #localiser
+2 #maison
+4 *est une espèce de #musée
+
+MOT-CLÉ:transport
+0 #localiser
+2 #transport
+
+MOT-CLÉ:exil
+0 #localiser
+2 #exil
+
+MOT-CLÉ:quartier
+0 #localiser
+2 #espace
+6 *dans #ville
+7 *pour #habiter
+
+RACINE: CRÉATION
+
+MOT-CLÉ:création
+0 #création
+
+MOT-CLÉ:processus de création
+0 #création
+4 #processus
+
+MOT-CLÉ:création littéraire
+0 #création
+2 #littérature
+
+MOT-CLÉ:création poétique
+0 #création
+2 #poésie
+
+MOT-CLÉ:cocréation
+0 #création
+1 #intelligence collective
+
+MOT-CLÉ:créativité
+0 #création
+4 #puissance
+
+MOT-CLÉ:la lecture créative
+0 #création
+8 ~gérondif #lire (en lisant)
+
+MOT-CLÉ:écriture
+0 #création
+2 #écrire
+
+MOT-CLÉ:processus d'écriture
+0 #création
+2 #écrire
+4 #processus
+
+MOT-CLÉ:réécriture
+0 #création
+2 #écrire
+4 #processus
+8 *encore #écrire
+
+MOT-CLÉ:scénarisation
+0 #création
+2 ##scénario
+4 #processus
+
+MOT-CLÉ:scène d'écriture
+0 #création
+2 #écriture
+6 *dans #scène
+
+RACINE: POLITIQUE ET SOCIÉTÉ
+
+MOT-CLÉ:communauté
+0 #politique &et #société
+2 #communauté
+
+MOT-CLÉ:politique
+0 #politique &et #société
+2 #politique
+
+MOT-CLÉ:pouvoir
+0 #politique &et #société
+2 #exercer le pouvoir
+
+MOT-CLÉ:régime autoritaire
+0 #politique &et #société
+2 #exercer le pouvoir
+4 *par le moyen de #relation de force
+
+MOT-CLÉ:démocratie
+0 #politique &et #société
+2 #exercer le pouvoir
+4 *par le moyen de ~tous #citoyen
+
+MOT-CLÉ:explosion démocratique
+0 #politique &et #société
+2 #exercer le pouvoir
+4 *par le moyen de ~tous #citoyen
+6 #croissance
+8 #rapide
+
+MOT-CLÉ:marginalité
+0 #politique &et #société
+2 #pauvreté &et #isolement
+6 *avec un mouvement centripète #bord
+
+MOT-CLÉ:agentivité
+0 #politique &et #société
+2 #avoir une capacité d'agir
+
+MOT-CLÉ:citoyenneté linguistique
+0 #politique &et #société
+2 #être citoyen
+7 *dans le contexte #langue
+
+MOT-CLÉ:décolonisation
+0 #politique &et #société
+2 #mouvements socio-politiques
+8 *contre ##colonialisme
+
+MOT-CLÉ:discours militants
+0 #politique &et #société
+2 *plusieurs #discours
+8 *possessif pour l'attribution d'un message ou discours #militant 
+
+MOT-CLÉ:émancipation
+0 #politique &et #société
+2 #mouvements socio-politiques
+7 *pour #liberté
+
+MOT-CLÉ:engagement politique
+0 #politique &et #société
+2 #engagement
+7 *dans le contexte #politique
+
+MOT-CLÉ:voix de femmes
+0 #politique &et #société
+2 ~plusieurs #voix
+8 *possessif pour l'attribution d'un message ou discours ~plusieurs #femme
+
+MOT-CLÉ:féminisme
+0 #politique &et #société
+2 #mouvements socio-politiques
+7 *pour ~les #femme
+ 
+MOT-CLÉ:sororité
+0 #politique &et #société
+2 #mouvements socio-politiques
+4 *en relation avec #sœur
+7 *pour ~les #femme
+
+MOT-CLÉ:positionnement social
+0 #politique &et #société
+2 #place
+6 *dans ~la #société
+
+MOT-CLÉ:esprit de communauté
+0 #politique &et #société
+2 #esprit
+8 *possessif abstrait #communauté
+
+MOT-CLÉ:facteurs sociaux
+0 #politique &et #société
+2 ~plusieurs #variable
+8 *possessif abstrait #société
+
+MOT-CLÉ:représentations sociales
+0 #politique &et #société
+2 ~plusieurs #représentation
+8 *possessif abstrait #société
+
+MOT-CLÉ:relationnalité
+0 #politique &et #société
+2 #entretenir des relations humaines
+
+
+RACINE: MÉTHODE
+
+MOT-CLÉ:analyse de discours
+0 #méthode
+2 #discours
+7 *pour #analyser
+
+MOT-CLÉ:recherche-création
+0 #méthode
+2 #créer
+7 *pour #chercher
+
+MOT-CLÉ:recherche-développement
+0 #méthode
+7 *pour #recherche et développement
+
+MOT-CLÉ:expérience sur le terrain
+0 #méthode
+2 #expérience
+6 *sur #terrain
+
+MOT-CLÉ:ethnographie
+0 #méthode
+8 *possessif idéal #anthropologie
+
+MOT-CLÉ:quantificateurs
+0 #méthode
+2 ~plusieurs #outil
+7 * pour #quantifier
+
+
+RACINE: COMPÉTENCE
+
+MOT-CLÉ:lecture
+0 #compétence
+2 #lire
+
+MOT-CLÉ:littératie
+0 #compétence
+2 #lire et écrire
+
+MOT-CLÉ:pratique théâtrale
+0 #compétence
+2 #théâtre
+4 *par le moyen de #jouer la comédie
+
+
+MOTS-CLÉS ISOLÉS
+
+MOT-CLÉ:évasion
+0 ~mode réflexif #libérer
+6 *hors de #captivité
+
+MOT-CLÉ:mesures rythmiques 
+0 #musique
+2 ~plusieurs #mesure
+8 *possessif concret #rythme
+
+MOT-CLÉ:lumières
+0 ~plusieurs #lumière
+5 #époque
+
+
