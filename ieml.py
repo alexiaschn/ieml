@@ -1,11 +1,7 @@
 import streamlit as st
 import pandas as pd
-
-
-# nettoyer corpus
-# système flexionnel avec recherche floue sur les signes particuliers * ~ etc.
-# connexion avec un corpus 'input/erudit_articles.csv'
-
+import requests
+import json
 
 # --- Paramètres ---
 
@@ -13,11 +9,9 @@ param = {'ontologie': "src/ontologie.csv",
         'corpus': 'src/test_corpus.csv'}
 
 st.set_page_config(layout='wide')
-st.title('navigation IEML et érudit')
+st.title("Navigation de l'ontologie de la littérature en IEML et recherche d'articles")
 
 # --- Configuration de la grille ---
-
-
 
 position_map = {
     "quand ?": "a1", "quoi ?": "a2", "où ?": 'a3',
@@ -56,7 +50,7 @@ def load_data(path):
     return pd.read_csv(path)
 
 data = load_data(param['ontologie'])
-corpus = load_data(param['corpus'])
+# corpus = load_data(param['corpus'])
 
 
 # --- Fonctions ---
@@ -67,11 +61,10 @@ def get_active_keyword():
         st.session_state.keyword = ""
 
     if "new_keyword" in st.session_state:
-        st.write(st.session_state['new_keyword'])
-        # On vient de cliquer sur un mot — mise à jour du keyword
         st.session_state.keyword = st.session_state.new_keyword
         del st.session_state.new_keyword
         st.session_state.selected_cells.clear()
+        st.session_state["show_isidore_results"] = False  # reset
         st.rerun()
 
     return st.text_input("Entrez un mot-clé (ex. pouvoir)", st.session_state.keyword)
@@ -137,12 +130,19 @@ def make_selection_match_function(filters):
 def display_entry_and_matches(entry):
     display_board(entry)  # affiche la grille
     with col2:
-        match_corpus = corpus[corpus.apply(make_match_function(entry["mot"]), axis=1)]
-        st.markdown("# Articles liés")
-        if match_corpus.empty:
-            st.info("Aucun article trouvé.")
-        else:
-            st.table(match_corpus[['titre', 'revue']])
+        st.markdown("# Articles ")
+        if st.button("Rechercher des articles dans Isidore", key=f"search_isidore_{entry['mot']}"):
+            st.session_state["show_isidore_results"] = True
+
+
+@st.cache_data(show_spinner=False)
+def get_isidore_articles(query):
+    url = f'https://api.isidore.science/resource/search?q={query}&replies=100&output=json'
+    res = requests.get(url)
+    content = json.loads(res.text)
+    articles = [reply['isidore'] for reply in content['response']['replies']['content']['reply']]
+    return articles
+
 
 # Affichage de l'échiquier sur moitié gauche/article lié à droite
 
@@ -173,11 +173,9 @@ with col1:
                     st.session_state["new_keyword"] = row["mot"]
                     st.session_state.selected_cells.clear()
                     st.rerun()
-        else:
-            st.warning("Aucun concept ni article trouvé.")
 
 
-    if st.button("Recherche", help='''Recherche un mot-clé dans l'ontologie IEML à partir des rôles grammaticaux''' ):
+    if st.button("Recherche" ):
         filters = dict(st.session_state.selected_cells)
         # st.write(st.session_state.selected_cells)
         # st.write(filters)
@@ -211,6 +209,21 @@ with col1:
                         st.session_state.selected_cells.clear()
                         st.session_state["afficher_resultats"] = False  # reset
                         st.rerun()
-
+with col2:
+    if st.session_state.get("show_isidore_results"):
+        articles = get_isidore_articles(entry['mot'])
+        if not articles:
+            st.info("Aucun article trouvé.")
+        else:
+            titles = [a['title'][0]['$'] for a in articles]
+            urls = [a['url'] for a in articles]
+            data_df = pd.DataFrame(
+                    {
+                        'title' : titles,
+                        'url': urls
+                    }
+                   )
+            st.table(data_df)
+#  {a['title'][0]['$']: a['url'] for a in articles}
 
 
