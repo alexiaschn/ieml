@@ -98,6 +98,52 @@ def display_board(entry):
                     else:
                         st.session_state.selected_cells.add((field, value))
                     st.rerun()
+def display_microconcept_board(filters):
+    st.markdown("## Micro-concepts liés à la sélection")
+
+    # Appliquer le filtre sur le DataFrame ontologique
+    match_func = make_selection_match_function(filters)
+    matching_rows = data[data.apply(match_func, axis=1)]
+
+    if matching_rows.empty:
+        st.info("Aucune correspondance.")
+        return
+
+    # Afficher les micro-concepts dans chaque rôle (case de la grille)
+    for row in layout:
+        cols = st.columns(3)
+        for i, pos in enumerate(row):
+            field = reverse_map[pos]
+
+            # Extraire tous les micro-concepts distincts pour ce champ
+            micro_concepts = (
+                matching_rows[field]
+                .dropna()
+                .astype(str)
+                .apply(str.strip)
+                .replace("nan", pd.NA)
+                .dropna()
+                .unique()
+            )
+            micro_concepts.sort()
+
+            with cols[i]:
+                st.markdown(f"**{label_map[field]}**")
+
+                if len(micro_concepts) == 0:
+                    st.caption("–")
+                else:
+                    for val in micro_concepts:
+                        key = f"{field}_{val}"
+                        selected = (field, val) in st.session_state.selected_cells
+                        bg_color = "#EF9A9A" if selected else "#f0f0f0"
+                        label = f"✅ {val}" if selected else val
+                        if st.button(label, key=key):
+                            if selected:
+                                st.session_state.selected_cells.remove((field, val))
+                            else:
+                                st.session_state.selected_cells.add((field, val))
+                            st.rerun()
 
 def make_match_function(term):
     term = str(term).lower().strip()
@@ -151,7 +197,7 @@ with col1:
 
     # index as sidebar cause st.expander is a bitch
     with st.sidebar:
-        st.markdown("### Liste des mots-clés IEML")
+        st.markdown("### Mots-clés définis")
         mots = sorted(data["mot"].dropna().unique())
         for mot in mots:
             if st.button(mot, key=f"index_{mot}"):
@@ -175,7 +221,7 @@ with col1:
         related_entries = data[data.apply(make_match_function(keyword), axis=1)]
 
         if not related_entries.empty:
-            st.info("Ce mot-clé n'est pas dans l'ontologie mais est un micro-concept IEML")
+            st.info("Ce mot-clé n'est pas dans l'ontologie mais correspond à un micro-concept IEML")
             st.markdown(f"### Mots-clés contenant le micro-concept `{keyword}`")
             for _, row in related_entries.iterrows():
                 if st.button(row["mot"], key=f"related_{row['mot']}"):
@@ -184,26 +230,28 @@ with col1:
                     st.rerun()
 
 
+        # Bouton Recherche juste pour valider qu'on a une sélection valide et déclencher l'affichage des résultats
     if st.button("Recherche" ):
         filters = dict(st.session_state.selected_cells)
-        # st.write(st.session_state.selected_cells)
-        # st.write(filters)
         if not filters:
             st.error("Sélectionnez au moins une cellule.")
         else:
             has_non_empty = any(val.strip() for val in filters.values())
-
             if not has_non_empty:
                 st.error("Sélectionnez au moins une cellule avec une valeur non vide.")
-                st.rerun()
             else:
                 st.session_state["afficher_resultats"] = True
 
+    # Affichage dynamique de la grille des micro-concepts liée à la sélection courante
     if st.session_state.get("afficher_resultats", False):
         filters = dict(st.session_state.selected_cells)
+        display_microconcept_board(filters)  # met à jour la grille micro-concepts avec la sélection courante
+
+        # Calcul de la liste finale des mots-clés correspondant à cette sélection
         match_func = make_selection_match_function(filters)
         matches = data[data.apply(match_func, axis=1)]
-        if matches.empty or ((matches.iloc[0].get('mot', '') == keyword) and (matches.shape[0] == 1)) : 
+
+        if matches.empty or ((matches.iloc[0].get('mot', '') == keyword) and (matches.shape[0] == 1)):
             st.info("Aucun résultat. Cliquez sur le bouton ci-dessous pour réessayer.")
             if st.button("Nouvelle sélection"):
                 st.session_state.selected_cells.clear()
@@ -212,12 +260,13 @@ with col1:
         else:
             st.markdown("## Mots-clés avec micro-concepts sélectionnés")
             for _, row in matches.iterrows():
-                if not row['mot'] == keyword:
+                if row['mot'] != keyword:
                     if st.button(row["mot"], key=f"result_{row['mot']}"):
                         st.session_state["new_keyword"] = row["mot"]
                         st.session_state.selected_cells.clear()
-                        st.session_state["afficher_resultats"] = False  # reset
+                        st.session_state["afficher_resultats"] = False
                         st.rerun()
+
 with col2:
     if st.session_state.get("show_isidore_results"):
         articles = get_isidore_articles(entry['mot'])
