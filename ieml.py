@@ -192,19 +192,21 @@ def get_isidore_articles(query):
 # Affichage de l'échiquier sur moitié gauche/article lié à droite
 
 col1, col2 = st.columns([1, 1], vertical_alignment='top')  
+
+# index as sidebar cause st.expander is a bitch
+with st.sidebar:
+    st.markdown("### Mots-clés définis")
+    mots = sorted(data["mot"].dropna().unique())
+    for mot in mots:
+        if st.button(mot, key=f"index_{mot}"):
+            st.session_state["new_keyword"] = mot
+            st.session_state.selected_cells.clear()
+            st.rerun()
+        
 with col1:
     st.title("IEML")
 
-    # index as sidebar cause st.expander is a bitch
-    with st.sidebar:
-        st.markdown("### Mots-clés définis")
-        mots = sorted(data["mot"].dropna().unique())
-        for mot in mots:
-            if st.button(mot, key=f"index_{mot}"):
-                st.session_state["new_keyword"] = mot
-                st.session_state.selected_cells.clear()
-                st.rerun()
-        
+
     keyword = get_active_keyword()
     entry = data[data["mot"].str.lower() == keyword.lower()].squeeze() if keyword else None
 
