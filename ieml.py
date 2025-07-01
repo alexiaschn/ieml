@@ -5,8 +5,7 @@ import json
 
 # --- Paramètres ---
 
-param = {'ontologie': "src/ontologie.csv", 
-        'corpus': 'src/test_corpus.csv'}
+param = {'ontologie': "src/ontologie.csv"}
 
 st.set_page_config(layout='wide')
 st.title("Navigation de l'ontologie de la littérature en IEML et recherche d'articles")
@@ -71,7 +70,7 @@ def get_active_keyword():
 
 
 def display_board(entry):
-    st.markdown(f"## Mot : {entry['mot']}")
+    st.markdown(f"## Mot-clé : `{entry['mot']}`")
     for row in layout:
         cols = st.columns(3, vertical_alignment='center')
         for i, pos in enumerate(row):
@@ -150,6 +149,16 @@ col1, col2 = st.columns([1, 1], vertical_alignment='top')
 with col1:
     st.title("IEML")
 
+    # index as sidebar cause st.expander is a bitch
+    with st.sidebar:
+        st.markdown("### Liste des mots-clés IEML")
+        mots = sorted(data["mot"].dropna().unique())
+        for mot in mots:
+            if st.button(mot, key=f"index_{mot}"):
+                st.session_state["new_keyword"] = mot
+                st.session_state.selected_cells.clear()
+                st.rerun()
+        
     keyword = get_active_keyword()
     entry = data[data["mot"].str.lower() == keyword.lower()].squeeze() if keyword else None
 
@@ -167,7 +176,7 @@ with col1:
 
         if not related_entries.empty:
             st.info("Ce mot-clé n'est pas dans l'ontologie mais est un micro-concept IEML")
-            st.markdown(f"### Mots associés au micro-concept {keyword}")
+            st.markdown(f"### Mots-clés contenant le micro-concept `{keyword}`")
             for _, row in related_entries.iterrows():
                 if st.button(row["mot"], key=f"related_{row['mot']}"):
                     st.session_state["new_keyword"] = row["mot"]
@@ -201,7 +210,7 @@ with col1:
                 st.session_state["afficher_resultats"] = False
                 st.rerun()
         else:
-            st.markdown("## Mots filtrés")
+            st.markdown("## Mots-clés avec micro-concepts sélectionnés")
             for _, row in matches.iterrows():
                 if not row['mot'] == keyword:
                     if st.button(row["mot"], key=f"result_{row['mot']}"):
