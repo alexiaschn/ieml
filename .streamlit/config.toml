@@ -1,2 +1,8 @@
 [theme]
 base="light"
+
+[ui]
+hideSidebarNav = false
+
+[server]
+headless = true

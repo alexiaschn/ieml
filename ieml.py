@@ -7,7 +7,10 @@ import json
 
 param = {'ontologie': "src/ontologie.csv"}
 
-st.set_page_config(layout='wide')
+st.set_page_config(layout='wide',
+    initial_sidebar_state="expanded",
+    page_title="IEML",
+)
 st.title("Navigation de l'ontologie de la littérature en IEML et recherche d'articles")
 
 # --- Configuration de la grille ---
