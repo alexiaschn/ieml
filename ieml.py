@@ -3,6 +3,17 @@ import pandas as pd
 import requests
 import json
 
+# todo
+# texte informatif
+# cas d'usages
+# recherche par valeur et par case
+# fix bug : recherche précédente reste
+# réponse sous forme de liste et pas grille de micro-concept
+# not responsive grille
+# recherche mot-clés complexe (plusieurs mots)
+# division des mots avec virgules
+# conservation des logs utilisateur.ice.s.
+
 # --- Paramètres ---
 
 param = {'ontologie': "src/ontologie.csv"}
