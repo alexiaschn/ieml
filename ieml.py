@@ -10,6 +10,7 @@ import json
 # not responsive grille
 # recherche mot-clés complexe (plusieurs mots)
 # conservation des logs utilisateur.ice.s.
+# antidict
 
 # done
 # réponse sous forme de liste et pas grille de micro-concept 
@@ -170,22 +171,18 @@ def display_board(entry):
 
 def display_microconcept_list(selected_values):
     """
-    Affiche :
-    1️⃣ La liste des micro-concepts liés à la sélection courante (inclut * et ~)
-    2️⃣ La liste des mots-clés contenant ces micro-concepts
+    Affiche les micro-concepts liés à la sélection.
+    Seules les cellules des mots-clés matchés sont utilisées.
     """
 
     st.markdown("## Micro-concepts liés à la sélection")
-
-    # Normaliser la sélection (garder uniquement les valeurs non vides)
     filters = [str(v).strip() for v in selected_values if v and str(v).strip()]
     
-    # Si aucune sélection, on n'affiche rien
     if not filters:
         st.info("Sélectionnez un micro-concept pour afficher les résultats.")
         return
 
-    # --- Récupérer toutes les lignes correspondant à la sélection ---
+    # Récupérer toutes les lignes correspondant à la sélection
     match_func = make_selection_match_function(filters)
     matching_rows = data[data.apply(match_func, axis=1)]
 
@@ -193,16 +190,16 @@ def display_microconcept_list(selected_values):
         st.info("Aucune correspondance pour cette sélection.")
         return
 
-    # --- Extraire tous les micro-concepts présents dans ces lignes ---
-    micro_concepts = []
+    # Extraire **uniquement les cellules entières des lignes matchées**
+    micro_concepts = set()
     for field in reverse_map.values():
         for cell in matching_rows[field].dropna():
-            tokens = _tokenize_cell(str(cell), keep_special=True)  # inclut * et ~
-            micro_concepts.extend(tokens)
+            cell_clean = str(cell).strip()
+            if cell_clean:  # garder la cellule entière
+                micro_concepts.add(cell_clean)
 
-    micro_concepts = sorted(set(micro_concepts))
+    micro_concepts = sorted(micro_concepts)
 
-    # Affichage liste micro-concepts
     if micro_concepts:
         st.markdown("### Micro-concepts disponibles")
         for val in micro_concepts:
@@ -216,16 +213,12 @@ def display_microconcept_list(selected_values):
                     st.session_state.selected_cells.add(val)
                 st.session_state["afficher_resultats"] = False
                 st.rerun()
-
     else:
         st.caption("Aucun micro-concept valide trouvé.")
 
-    # --- Afficher les mots-clés associés aux micro-concepts sélectionnés ---
+    # --- Afficher les mots-clés associés ---
     st.markdown("## Mots-clés avec micro-concepts sélectionnés")
-
-    # Matching substring sur tous les tokens
-    match_func = make_selection_match_function(filters)
-    associated_keywords = data[data.apply(match_func, axis=1)]["mot"].dropna().unique()
+    associated_keywords = matching_rows["mot"].dropna().unique()
     associated_keywords = sorted([kw for kw in associated_keywords if kw.lower() != st.session_state.keyword.lower()])
 
     if associated_keywords:
@@ -236,7 +229,6 @@ def display_microconcept_list(selected_values):
                 st.session_state.selected_cells.clear()
                 st.session_state["afficher_resultats"] = False
                 st.rerun()
-
     else:
         st.info("Aucun mot-clé associé trouvé pour cette sélection.")
 
@@ -273,44 +265,44 @@ def _tokenize_cell(cell_str, keep_special=True):
     if pd.isnull(cell_str):
         return []
     cell_str = str(cell_str).strip().lower()
-    tokens = re.split(r'[,\|/]+', cell_str)
-    tokens = [t.strip() for t in tokens if t.strip()]
+    # print(cell_str)
+    # tokens = re.split(r'[,\|/]+', cell_str)
+    tokens = cell_str.split()
+    # tokens = [t.strip() for t in tokens if t.strip()]
     if not keep_special:
         tokens = [t for t in tokens if not t.startswith(("*", "~"))]
+    # print(tokens)
     return tokens
 
     
 def make_selection_match_function(filters, debug=False):
     """
-    Match une ligne uniquement si chaque filtre est trouvé dans au moins une cellule.
-    - Ignore les cellules vides
-    - Utilise substring matching
-    - Inclut les tokens avec * et ~ pour le match
+    Match une ligne uniquement si chaque filtre est trouvé dans au moins une cellule,
+    sauf la colonne 'mot'.
     """
     if not filters:
-        # Aucun filtre → ne rien matcher
         return lambda row: False
 
     norm_filters = [str(f).strip().lower() for f in filters if f.strip()]
 
     def match(row):
+        cols_to_check = [c for c in row.index if c != 'mot']
         for f in norm_filters:
             found = False
-            for cell in row.values:
+            for cell in row[cols_to_check]:
                 if pd.isnull(cell):
                     continue
                 tokens = _tokenize_cell(str(cell), keep_special=True)
+                og_toks = _tokenize_cell(f, keep_special=True)
                 for t in tokens:
-                    if f in t or t in f:
+                    if t in og_toks:
                         found = True
-                        if debug:
-                            print(f"DEBUG MATCH: filtre='{f}' trouve dans token='{t}' pour mot='{row['mot']}'")
+                        # if debug:
+                        print(f"DEBUG MATCH: filtre='{f}' trouve dans token='{t}' pour mot='{row['mot']}'")
                         break
                 if found:
                     break
             if not found:
-                # if debug:
-                #     print(f"DEBUG NO MATCH: filtre='{f}' non trouvé pour mot='{row['mot']}', tokens={tokens}")
                 return False
         return True
 
@@ -385,11 +377,18 @@ with col1:
     if st.session_state.get("afficher_resultats", False):
         filters = list(st.session_state.selected_cells)
         # DEBUG: affiche la sélection actuelle
-        st.caption(f"DEBUG — selected_cells: {sorted(list(st.session_state.selected_cells))}")
+        # st.caption(f"DEBUG — selected_cells: {sorted(list(st.session_state.selected_cells))}")
         display_microconcept_list(filters)
 
         match_func = make_selection_match_function(filters)
         matches = data[data.apply(match_func, axis=1)]
+    else:
+        filters = list(st.session_state.selected_cells)
+        display_microconcept_list(filters)
+        match_func = make_selection_match_function(filters)
+        matches = data[data.apply(match_func, axis=1)]
+
+
 
 with col2:
     if st.session_state.get("show_isidore_results") and keyword:
