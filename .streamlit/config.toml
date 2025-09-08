@@ -1,5 +1,11 @@
 [theme]
 base="light"
+codeBackgroundColor="powderBlue"
+primaryColor="slateBlue"
+backgroundColor="mintCream"
+secondaryBackgroundColor="darkSeaGreen"
+baseRadius="none"
+
 
 [ui]
 hideSidebarNav = false
