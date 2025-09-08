@@ -26,7 +26,7 @@ import hashlib
 
 # --- Paramètres ---
 param = {'ontologie': "src/ontologie2.csv", 
-        'out': "out/_user_logs.csv", 
+        'out': "out/user_logs.csv", 
         'antidict': ['pour', 'le', 'la', 'au', 'a', 'moyen', 'de', 'avec', 'contexte', 'une' , 'un', 'contre' 'avec', 'sans' 'dans', 'par', 'afin' ]}
 
 st.set_page_config(layout='wide',

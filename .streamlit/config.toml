@@ -1,9 +1,7 @@
 [theme]
 base="light"
-codeBackgroundColor="powderBlue"
-primaryColor="slateBlue"
-backgroundColor="mintCream"
-secondaryBackgroundColor="darkSeaGreen"
+backgroundColor="white"
+secondaryBackgroundColor="mintCream"
 baseRadius="none"
 
 
