@@ -26,8 +26,12 @@ import hashlib
 
 # --- Paramètres ---
 param = {'ontologie': "src/ontologie2.csv", 
-        'out': "out/_user_logs.csv", 
+        'out': "out/user_logs.csv", 
         'antidict': ['pour', 'le', 'la', 'au', 'a', 'moyen', 'de', 'avec', 'contexte', 'une' , 'un', 'contre' 'avec', 'sans' 'dans', 'par', 'afin' ]}
+
+# BASEROW_API_URL = "http://localhost/api/database/rows/table/698/"
+BASEROW_API_URL = "https://baserow.ecrituresnumeriques.ca/api/database/rows/table/214/?user_field_names=true"
+BASEROW_TOKEN = st.secrets["baserow_token"]  
 
 st.set_page_config(layout='wide',
     initial_sidebar_state="expanded",
@@ -80,23 +84,56 @@ data = load_data(param['ontologie'])
 # --- Logs ---
 
 
+# CSV logs
+# def log_event(action, details=""):
+#     """
+#     Sauvegarde un événement utilisateur dans un fichier CSV.
+#     - action : nom de l’action (clic, recherche…)
+#     - details : infos additionnelles (mot, filtres…)
+#     """
+#     now = datetime.datetime.now().isoformat()
+#     entry = f'"{now}","{action}","{details}"\n'
+    
+#     # crée le fichier avec en-tête si inexistant
+#     if not os.path.exists(param['out']):
+#         with open(param['out'], "w", encoding="utf-8") as f:
+#             f.write("timestamp,action,details\n")
+    
+#     with open(param['out'], "a", encoding="utf-8") as f:
+#         f.write(entry)
 
-def log_event(action, details=""):
-    """
-    Sauvegarde un événement utilisateur dans un fichier CSV.
-    - action : nom de l’action (clic, recherche…)
-    - details : infos additionnelles (mot, filtres…)
-    """
+# DEBUG REMOTE LOGS
+# st.button("Test Log", on_click=lambda: log_event("test_action", "test_details"))
+
+# local Baserow logs
+def log_event(action, details=""):    
     now = datetime.datetime.now().isoformat()
-    entry = f'"{now}","{action}","{details}"\n'
-    
-    # crée le fichier avec en-tête si inexistant
-    if not os.path.exists(param['out']):
-        with open(param['out'], "w", encoding="utf-8") as f:
-            f.write("timestamp,action,details\n")
-    
-    with open(param['out'], "a", encoding="utf-8") as f:
-        f.write(entry)
+    headers = {
+        "Authorization": f"Token {BASEROW_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "timestamp" : now,
+        "action": action,
+        "details": details
+    }
+
+    res = requests.post(BASEROW_API_URL, headers=headers, json=payload)
+
+    if res.status_code not in (200, 201):
+        st.error(f"Erreur log Baserow: {res.status_code} - {res.text}")
+
+def get_logs():
+    headers = {"Authorization": f"Token {BASEROW_TOKEN}"}
+    res = requests.get(BASEROW_API_URL, headers=headers)
+    if res.status_code == 200:
+        return res.json()["results"]
+    return []
+
+if st.sidebar.checkbox("Afficher logs Baserow"):
+    logs = get_logs()
+    st.sidebar.write(logs)
+
 
 # --- Helpers / init ---
 if "selected_cells" not in st.session_state:
