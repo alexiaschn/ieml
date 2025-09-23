@@ -8,6 +8,8 @@ import os
 import hashlib
 
 # todo
+# transfert pluggin JS ? 
+# accrocher init article !! 
 # cas d'usages
 # not responsive grille
 # recherche mot-clés complexe (plusieurs mots)
@@ -77,7 +79,8 @@ label_map = {"quand":"quand ?",
 # --- Chargement des données ---
 @st.cache_data
 def load_data(path):
-    return pd.read_csv(path)
+    return pd.read_csv(path).drop_duplicates(subset='mot')
+
 
 data = load_data(param['ontologie'])
 
